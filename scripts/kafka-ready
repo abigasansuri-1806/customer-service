@@ -1,0 +1,13 @@
+#!/bin/bash
+# Wait for Kafka to be ready
+RETRIES=30
+while ! /usr/bin/kafka-topics --bootstrap-server kafka:9092 --list > /dev/null 2>&1; do
+  RETRIES=$((RETRIES-1))
+  if [ $RETRIES -eq 0 ]; then
+    echo "Kafka not ready after 30 tries"
+    exit 1
+  fi
+  echo "Waiting for Kafka... ($RETRIES retries left)"
+  sleep 5
+done
+echo "Kafka is ready!"
